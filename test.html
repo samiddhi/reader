@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            /* Base Styles */
+            body {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                line-height: 1.6;
+                color: #333;
+            }
+
+            p {
+                margin-block-start: 5px;
+                margin-block-end: 5px;
+            }
+
+            /* Paragraph Container */
+            .paragraph-group {
+                padding-top: 5px;
+                padding-bottom: 5px; /* Default padding, will expand on hover */
+                padding-left: 16px;
+                padding-right: 50px;
+                position: relative;
+                transition: all 0.3s ease;
+                border-radius: 10px;
+                overflow: hidden; /* Ensure progress bar stays within bounds */
+            }
+
+            .paragraph-group:hover {
+                background: rgba(0, 0, 0, 0.02);
+                padding-bottom: 20px; /* Expand padding to reveal progress bar */
+            }
+
+            /* Audio Controls */
+            .audio-controls {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .paragraph-group:hover .audio-controls,
+            .paragraph-group.active .audio-controls {
+                opacity: 1;
+            }
+
+            /* Play Button */
+            .play-btn {
+                width: 32px;
+                height: 32px;
+                border: none;
+                border-radius: 50%;
+                background: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #0071e3;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+
+            .play-btn:hover {
+                background: #f5f5f5;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+            }
+
+            .play-btn.playing {
+                background: #0071e3;
+                color: white;
+            }
+
+            /* Mode Selector */
+            .mode-selector {
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                background: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border-radius: 24px;
+                padding: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                display: flex;
+                gap: 4px;
+                z-index: 100;
+            }
+
+            .mode-btn {
+                border: none;
+                background: none;
+                padding: 8px 16px;
+                border-radius: 16px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 13px;
+                color: #666;
+                transition: all 0.3s ease;
+            }
+
+            .mode-btn svg {
+                width: 14px;
+                height: 14px;
+                fill: currentColor;
+            }
+
+            .mode-btn.active {
+                background: rgba(0, 113, 227, 0.1);
+                color: #0071e3;
+            }
+
+            /* Active Paragraph Styling */
+            .paragraph-group.active {
+                background: rgba(0, 113, 227, 0.05);
+                box-shadow: inset 3px 0 0 #0071e3;
+            }
+
+            /* Progress Bar */
+            .progress-container {
+                position: absolute;
+                bottom: 5px; /* Align to default padding, revealed by expansion */
+                left: 16px; /* Match paragraph padding */
+                right: 50px; /* Match audio controls space */
+                height: 12px; /* Fixed height for progress bar */
+                opacity: 0; /* Hidden by default */
+                transition: opacity 0.3s ease; /* Fade in/out */
+                cursor: pointer;
+            }
+
+            .paragraph-group:hover .progress-container {
+                opacity: 1; /* Reveal only on hover */
+            }
+
+            .progress-bar {
+                height: 4px; /* Thicker but still minimal */
+                background: rgba(0, 113, 227, 0.2);
+                width: 100%;
+                border-radius: 2px;
+                position: relative;
+                margin-top: 4px; /* Centered vertically in the revealed space */
+            }
+
+            .progress-indicator {
+                position: absolute;
+                height: 100%;
+                background: #0071e3;
+                width: 0;
+                border-radius: 2px;
+                will-change: width;
+            }
+
+            /* Add small circle handle on hover */
+            .progress-container:hover .progress-indicator {
+                height: 6px;
+                margin-top: -1px;
+            }
+
+            .progress-container:hover .progress-indicator::after {
+                content: "";
+                position: absolute;
+                right: -4px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 8px;
+                height: 8px;
+                background: #0071e3;
+                border-radius: 50%;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="paragraph-group" data-audio="1. Prvo poglavje....mp3">
+            <div class="audio-controls">
+                <button class="play-btn">▶</button>
+            </div>
+            <p>Prvo poglavje.</p>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-indicator"></div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="paragraph-group"
+            data-audio="2. Fant, ki je preživel....mp3"
+        >
+            <div class="audio-controls">
+                <button class="play-btn">▶</button>
+            </div>
+            <p>Fant, ki je preživel.</p>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-indicator"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="paragraph-group" data-audio="18. Velikan je sedel na zofo, ki je....mp3">
+            <div class="audio-controls">
+                <button class="play-btn">▶</button>
+            </div>
+            <p>Velikan je sedel na zofo, ki je zaškripala pod njegovo težo. Iz žepov je začel vleci najrazličnejše stvari: bakren kotliček, zavitek klobasic, grebljico, čajnik, nekaj okrušenih skodelic in steklenico, polno tekočine jantarjeve barve. Preden se je lotil kuhanja čaja, je iz nje napravil požirek. Ko je voda za čaj zavrela, se je posvetil še klobasicam. Kmalu je bila koca polna vonja po hrani. Medtem ko si je velikan dal opravka, nihče ni rekel niti besede. Ko pa je iznad ognja z grebljico zbezal šest debelih, sočnih in nekoliko zažganih klobasic, se je Dudley nevede obliznil. Stric ga je rezko posvaril: "Ne dotakni se ničesar, kar ti ponudi, Dudley."</p>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-indicator"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="paragraph-group" data-audio="19. Velikan se je mračno....mp3">
+            <div class="audio-controls">
+                <button class="play-btn">▶</button>
+            </div>
+            <p>Velikan se je mračno nasmehnil. "Tacega obilnega pujska ni treba več pitat, Dursley, ne skrbi." Klobasice je podal Harryju. Ta ni še nikoli jedel česa tako dobrega!</p>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-indicator"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="manual">
+                <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                >
+                    <rect x="4" y="4" width="16" height="16" rx="2" />
+                    <path d="M12 8v4M10 10h4" />
+                </svg>
+
+                Manual
+            </button>
+
+            <button class="mode-btn" data-mode="continuous">
+                <svg viewBox="0 0 24 24" style="width: 24px; height: 24px">
+                    <path
+                        d="M3 10c2-2 4-2 6 0s4 2 6 0 4-2 6 0"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    />
+                    <path
+                        d="M3 14c2-2 4-2 6 0s4 2 6 0 4-2 6 0"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    />
+                </svg>
+                Continuous
+            </button>
+<button class="mode-btn" data-mode="repeat" title="Toggle Repeat">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
+                </svg>
+            </button>
+        </div>
+
+        <script>
+            // Audio system
+            let currentAudio = null;
+            let currentParagraph = null;
+            let playbackMode = "manual";
+            let repeatModeActive = false; // Added for repeat functionality
+            const audioElements = {};
+
+            // Initialize audio elements
+            document.querySelectorAll(".paragraph-group").forEach((para) => {
+                const audioSrc = para.getAttribute("data-audio");
+                audioElements[audioSrc] = new Audio(audioSrc);
+            });
+
+            document.querySelectorAll(".play-btn").forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    const paragraph = this.closest(".paragraph-group");
+                    const audioSrc = paragraph.getAttribute("data-audio");
+                    const audio = audioElements[audioSrc];
+
+                    if (currentAudio && currentAudio !== audio) {
+                        currentAudio.pause();
+                        isPlaying = false;
+                        if (currentParagraph) {
+                            const prevPlayBtn = currentParagraph.querySelector('.play-btn');
+                            if (prevPlayBtn) {
+                                prevPlayBtn.classList.remove('playing');
+                                prevPlayBtn.textContent = '▶';
+                            }
+                            currentParagraph.classList.remove('active');
+                        }
+                    }
+
+                    if (audio.paused) {
+                        // If audio had ended, reset currentTime and progress bar before playing
+                        if (audio.ended || (audio.duration > 0 && Math.abs(audio.currentTime - audio.duration) < 0.1)) {
+                            audio.currentTime = 0;
+                            const progressIndicator = paragraph.querySelector(".progress-indicator");
+                            if (progressIndicator) {
+                                progressIndicator.style.width = "0%";
+                            }
+                        }
+                        audio.play();
+                        this.classList.add("playing");
+                        this.textContent = "⏸";
+                        paragraph.classList.add("active");
+                        currentAudio = audio;
+                        currentParagraph = paragraph;
+                        isPlaying = true;
+                        requestAnimationFrame(updateProgress); // Start animation loop
+
+                        audio.onended = () => {
+                            isPlaying = false;
+                            // Don't immediately change button text or remove active class if we are repeating
+                            // this.classList.remove("playing");
+                            // this.textContent = "▶";
+                            // paragraph.classList.remove("active");
+
+                            if (repeatModeActive) {
+                                if (playbackMode === "manual") {
+                                    // Replay current audio
+                                    audio.currentTime = 0;
+                                    setTimeout(() => { // Added setTimeout for Safari compatibility
+                                        audio.play();
+                                        isPlaying = true; // Set back to true as it's replaying
+                                    }, 0);
+                                    // No need to click the button, just play the audio
+                                } else if (playbackMode === "continuous") {
+                                    const nextParagraph = paragraph.nextElementSibling;
+                                    if (nextParagraph && nextParagraph.classList.contains("paragraph-group")) {
+                                        // Play next paragraph
+                                        setTimeout(() => {
+                                            nextParagraph.querySelector(".play-btn").click();
+                                        }, 300);
+                                    } else {
+                                        // It's the last paragraph, repeat from the first
+                                        const firstParagraph = document.querySelector(".paragraph-group");
+                                        if (firstParagraph) {
+                                            setTimeout(() => {
+                                                firstParagraph.querySelector(".play-btn").click();
+                                            }, 300);
+                                        } else { // Fallback if no paragraphs found (should not happen)
+                                            this.classList.remove("playing");
+                                            this.textContent = "▶";
+                                            paragraph.classList.remove("active");
+                                        }
+                                    }
+                                } else { // Should not happen, but as a fallback
+                                    this.classList.remove("playing");
+                                    this.textContent = "▶";
+                                    paragraph.classList.remove("active");
+                                }
+                            } else {
+                                // Original behavior when repeat is off
+                                this.classList.remove("playing");
+                                this.textContent = "▶";
+                                paragraph.classList.remove("active");
+                                // Reset progress bar for the paragraph that just ended
+                                if (paragraph) {
+                                    const progressIndicator = paragraph.querySelector(".progress-indicator");
+                                    if (progressIndicator) {
+                                        progressIndicator.style.width = "0%";
+                                    }
+                                }
+                                if (playbackMode === "continuous") {
+                                    const nextParagraph = paragraph.nextElementSibling;
+                                    if (nextParagraph && nextParagraph.classList.contains("paragraph-group")) {
+                                        setTimeout(() => {
+                                            nextParagraph.querySelector(".play-btn").click();
+                                        }, 300);
+                                    }
+                                }
+                            }
+                        };
+                    } else {
+                        audio.pause();
+                        isPlaying = false;
+                        this.classList.remove("playing");
+                        this.textContent = "▶";
+                        paragraph.classList.remove("active");
+                        currentAudio = null;
+                        currentParagraph = null;
+                    }
+                });
+            });
+
+            // Mode selector
+            document.querySelectorAll(".mode-btn").forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    const clickedMode = this.getAttribute("data-mode");
+
+                    if (clickedMode === "repeat") {
+                        this.classList.toggle("active");
+                        repeatModeActive = this.classList.contains("active");
+                    } else {
+                        // Handle manual and continuous modes
+                        document.querySelectorAll(".mode-btn[data-mode='manual'], .mode-btn[data-mode='continuous']").forEach(b => b.classList.remove("active"));
+                        this.classList.add("active");
+                        playbackMode = clickedMode;
+
+                        if (
+                            playbackMode === "continuous" &&
+                            currentAudio &&
+                            !currentAudio.paused &&
+                            !repeatModeActive // Only trigger if not repeating all
+                        ) {
+                            // currentAudio.onended(); // This might be redundant or cause issues, let's test
+                        }
+                    }
+                });
+            });
+
+            document
+                .querySelectorAll(".progress-container")
+                .forEach((container) => {
+                    container.addEventListener("click", function (e) {
+                        const paragraph = this.closest(".paragraph-group");
+                        const audioSrc = paragraph.getAttribute("data-audio");
+                        const audio = audioElements[audioSrc];
+
+                        const progressBar = this.querySelector(".progress-bar");
+                        const rect = progressBar.getBoundingClientRect();
+                        const seekPos =
+                            Math.min(
+                                Math.max(0, e.clientX - rect.left),
+                                rect.width
+                            ) / rect.width;
+
+                        const indicator = paragraph.querySelector(".progress-indicator");
+
+                        // Set audio time
+                        audio.currentTime = seekPos * audio.duration;
+
+                        // Update width immediately based on the accurate seekPos
+                        // seekPos is already calculated to be between 0 and 1.
+                        indicator.style.width = `${seekPos * 100}%`;
+
+                    });
+                });
+
+            let isPlaying = false;
+
+            function updateProgress() {
+                if (!isPlaying || !currentAudio) return;
+                requestAnimationFrame(() => {
+                    const progress =
+                        (currentAudio.currentTime / currentAudio.duration) *
+                        100;
+                    currentParagraph.querySelector(
+                        ".progress-indicator"
+                    ).style.width = `${progress}%`;
+                    if (isPlaying) requestAnimationFrame(updateProgress); // Continue loop
+                });
+            }
+
+        </script>
+    </body>
+</html>
+

@@ -104,6 +104,30 @@ p {
     align-items: center;
     justify-content: center;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    font-size: 0; /* Hide original text/unicode character */
+}
+
+.play-btn::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: currentColor; /* This will now correctly use the .play-btn's color */
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    /* Default Play Icon (Triangle) - fill can be any color, as it's used for masking */
+    -webkit-mask-image: url('data:image/svg+xml;utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"%3E%3Cpath d="M8 5v14l11-7z"/%3E%3C/svg%3E');
+    mask-image: url('data:image/svg+xml;utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"%3E%3Cpath d="M8 5v14l11-7z"/%3E%3C/svg%3E');
+}
+
+.play-btn.playing::before {
+    /* Pause Icon (Two Bars) - fill can be any color */
+    -webkit-mask-image: url('data:image/svg+xml;utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"%3E%3Cpath d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/%3E%3C/svg%3E');
+    mask-image: url('data:image/svg+xml;utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"%3E%3Cpath d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/%3E%3C/svg%3E');
 }
 
 .light .play-btn {

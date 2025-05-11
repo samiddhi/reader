@@ -353,6 +353,57 @@ p {
     white-space: nowrap;
     font-family: "Roboto Medium", serif; /* From paliReader */
 }
+/*
+    Styles for the new theme toggle button (#theme-button)
+    This button is a child of .links-area and also has .icon-button class.
+    We override/extend .icon-button styles for a simpler, circular, flat look.
+*/
+#theme-button {
+    width: 40px;
+    height: 40px;
+    padding: 0;                     /* Override .icon-button padding */
+    border-radius: 50%;             /* Circular shape */
+    flex-direction: row;            /* Override .icon-button's column direction */
+    justify-content: center;        /* Center icon horizontally */
+    align-items: center;            /* Center icon vertically */
+    background-color: transparent;  /* Flat: no default background */
+    /* transition properties are inherited from .icon-button */
+}
+
+/* Override general .icon-button svg styles for the theme icons */
+#theme-button svg {
+    width: 22px;  /* Adjusted size for visual balance within the 40px circle */
+    height: 22px;
+    margin-bottom: 0; /* Remove margin from general .icon-button svg style */
+    fill: none;       /* CRITICAL: These icons use stroke, not fill */
+    stroke: currentColor; /* Ensure stroke is used and inherits color from #theme-button's color property */
+    stroke-width: 2;  /* Matches SVG attribute, can be adjusted if needed */
+}
+
+/* Light mode styles for the theme button */
+.light #theme-button {
+    color: var(--charcoal); /* Icon stroke color */
+}
+.light #theme-button:hover {
+    background-color: rgba(0, 0, 0, 0.05); /* Subtle hover background */
+    color: var(--accent-color);            /* Icon stroke color on hover */
+}
+
+/* Dark mode styles for the theme button */
+.dark #theme-button {
+    color: var(--off-white); /* Icon stroke color */
+}
+.dark #theme-button:hover {
+    background-color: rgba(255, 255, 255, 0.08); /* Subtle hover background for dark mode */
+    color: var(--accent-color-dark);             /* Icon stroke color on hover */
+}
+
+/*
+  Note: The general .icon-button svg fill rules (around lines 335-346)
+  are effectively overridden for #theme-button's SVGs by '#theme-button svg { fill: none; }' above.
+  The 'color' property on #theme-button itself now controls the 'stroke' of its SVGs
+  due to 'stroke: currentColor' in the '#theme-button svg' rule.
+*/
 
 /* Font faces (optional) */
 /*

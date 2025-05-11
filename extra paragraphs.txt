@@ -1,0 +1,23 @@
+<div class="paragraph-group" data-audio="18. Velikan je sedel na zofo, ki je....mp3">
+    <div class="audio-controls">
+        <button class="play-btn">▶</button>
+    </div>
+    <p>Velikan je sedel na zofo, ki je zaškripala pod njegovo težo. Iz žepov je začel vleci najrazličnejše stvari: bakren kotliček, zavitek klobasic, grebljico, čajnik, nekaj okrušenih skodelic in steklenico, polno tekočine jantarjeve barve. Preden se je lotil kuhanja čaja, je iz nje napravil požirek. Ko je voda za čaj zavrela, se je posvetil še klobasicam. Kmalu je bila koca polna vonja po hrani. Medtem ko si je velikan dal opravka, nihče ni rekel niti besede. Ko pa je iznad ognja z grebljico zbezal šest debelih, sočnih in nekoliko zažganih klobasic, se je Dudley nevede obliznil. Stric ga je rezko posvaril: "Ne dotakni se ničesar, kar ti ponudi, Dudley."</p>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+    </div>
+</div>
+
+<div class="paragraph-group" data-audio="19. Velikan se je mračno....mp3">
+    <div class="audio-controls">
+        <button class="play-btn">▶</button>
+    </div>
+    <p>Velikan se je mračno nasmehnil. "Tacega obilnega pujska ni treba več pitat, Dursley, ne skrbi." Klobasice je podal Harryju. Ta ni še nikoli jedel česa tako dobrega!</p>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+    </div>
+</div>

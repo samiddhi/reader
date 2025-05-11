@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
         <style>
             /* Base Styles */
             body {
@@ -87,6 +88,7 @@
                 padding: 8px;
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
                 display: flex;
+                align-items: center; /* Ensure vertical alignment for separator */
                 gap: 4px;
                 z-index: 100;
             }
@@ -114,6 +116,16 @@
             .mode-btn.active {
                 background: rgba(0, 113, 227, 0.1);
                 color: #0071e3;
+            }
+
+            .mode-btn[data-mode="repeat"] {
+                padding: 8px; /* Icon is 24x24, 2*8px padding = 40px width/height */
+            }
+
+            .mode-separator {
+                width: 1px;
+                height: 24px;
+                background-color: #dadce0; /* Light gray separator */
             }
 
             /* Active Paragraph Styling */
@@ -203,30 +215,6 @@
             </div>
         </div>
 
-        <div class="paragraph-group" data-audio="18. Velikan je sedel na zofo, ki je....mp3">
-            <div class="audio-controls">
-                <button class="play-btn">▶</button>
-            </div>
-            <p>Velikan je sedel na zofo, ki je zaškripala pod njegovo težo. Iz žepov je začel vleci najrazličnejše stvari: bakren kotliček, zavitek klobasic, grebljico, čajnik, nekaj okrušenih skodelic in steklenico, polno tekočine jantarjeve barve. Preden se je lotil kuhanja čaja, je iz nje napravil požirek. Ko je voda za čaj zavrela, se je posvetil še klobasicam. Kmalu je bila koca polna vonja po hrani. Medtem ko si je velikan dal opravka, nihče ni rekel niti besede. Ko pa je iznad ognja z grebljico zbezal šest debelih, sočnih in nekoliko zažganih klobasic, se je Dudley nevede obliznil. Stric ga je rezko posvaril: "Ne dotakni se ničesar, kar ti ponudi, Dudley."</p>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-indicator"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="paragraph-group" data-audio="19. Velikan se je mračno....mp3">
-            <div class="audio-controls">
-                <button class="play-btn">▶</button>
-            </div>
-            <p>Velikan se je mračno nasmehnil. "Tacega obilnega pujska ni treba več pitat, Dursley, ne skrbi." Klobasice je podal Harryju. Ta ni še nikoli jedel česa tako dobrega!</p>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-indicator"></div>
-                </div>
-            </div>
-        </div>
-
         <div class="mode-selector">
             <button class="mode-btn active" data-mode="manual">
                 <svg
@@ -262,6 +250,7 @@
                 </svg>
                 Continuous
             </button>
+            <div class="mode-separator"></div>
 <button class="mode-btn" data-mode="repeat" title="Toggle Repeat">
                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
@@ -340,6 +329,9 @@
                                     const nextParagraph = paragraph.nextElementSibling;
                                     if (nextParagraph && nextParagraph.classList.contains("paragraph-group")) {
                                         // Play next paragraph
+                                        const nextAudioSrc = nextParagraph.getAttribute("data-audio");
+                                        const nextAudio = audioElements[nextAudioSrc];
+                                        if (nextAudio) nextAudio.currentTime = 0; // Auto-play: Start next track from beginning
                                         setTimeout(() => {
                                             nextParagraph.querySelector(".play-btn").click();
                                         }, 300);
@@ -347,6 +339,9 @@
                                         // It's the last paragraph, repeat from the first
                                         const firstParagraph = document.querySelector(".paragraph-group");
                                         if (firstParagraph) {
+                                            const firstAudioSrc = firstParagraph.getAttribute("data-audio");
+                                            const firstAudio = audioElements[firstAudioSrc];
+                                            if (firstAudio) firstAudio.currentTime = 0; // Auto-play loop: Start first track from beginning
                                             setTimeout(() => {
                                                 firstParagraph.querySelector(".play-btn").click();
                                             }, 300);
@@ -376,6 +371,9 @@
                                 if (playbackMode === "continuous") {
                                     const nextParagraph = paragraph.nextElementSibling;
                                     if (nextParagraph && nextParagraph.classList.contains("paragraph-group")) {
+                                        const nextAudioSrc = nextParagraph.getAttribute("data-audio");
+                                        const nextAudio = audioElements[nextAudioSrc];
+                                        if (nextAudio) nextAudio.currentTime = 0; // Auto-play: Start next track from beginning
                                         setTimeout(() => {
                                             nextParagraph.querySelector(".play-btn").click();
                                         }, 300);

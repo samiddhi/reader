@@ -254,6 +254,7 @@ p {
     width: 0;
     border-radius: 2px;
     will-change: width;
+    transition: none !important; /* Ensure no CSS transitions affect the indicator */
 }
 .light .progress-indicator {
     background: var(--accent-color);

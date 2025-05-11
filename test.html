@@ -126,16 +126,29 @@
             let currentParagraph = null;
             let playbackMode = "manual";
             let repeatModeActive = false; // Added for repeat functionality
+            // Add at the top of your script section:
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const audioElements = {};
+            const audioSources = {};
 
-            // Initialize audio elements
+            // Add this initialization:
             document.querySelectorAll(".paragraph-group").forEach((para) => {
                 const audioSrc = para.getAttribute("data-audio");
-                audioElements[audioSrc] = new Audio(audioSrc);
+                const audio = new Audio(audioSrc);
+                audioElements[audioSrc] = audio;
+                
+                // Create Web Audio source
+                const source = audioContext.createMediaElementSource(audio);
+                source.connect(audioContext.destination);
+                audioSources[audioSrc] = source;
             });
 
             document.querySelectorAll(".play-btn").forEach((btn) => {
                 btn.addEventListener("click", function () {
+                    // In your play button click handler, ADD this at the start:
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
                     const paragraph = this.closest(".paragraph-group");
                     const audioSrc = paragraph.getAttribute("data-audio");
                     const audio = audioElements[audioSrc];
@@ -159,6 +172,7 @@
                             audio.currentTime = 0;
                             const progressIndicator = paragraph.querySelector(".progress-indicator");
                             if (progressIndicator) {
+                                progressIndicator.style.transition = 'none'; // Add this line
                                 progressIndicator.style.width = "0%";
                             }
                         }
@@ -312,16 +326,23 @@
             let isPlaying = false;
 
             function updateProgress() {
-                if (!isPlaying || !currentAudio) return;
-                requestAnimationFrame(() => {
-                    const progress =
-                        (currentAudio.currentTime / currentAudio.duration) *
-                        100;
-                    currentParagraph.querySelector(
-                        ".progress-indicator"
-                    ).style.width = `${progress}%`;
-                    if (isPlaying) requestAnimationFrame(updateProgress); // Continue loop
-                });
+                if (!isPlaying || !currentAudio || !currentParagraph) return;
+                
+                // Use audioContext's more precise timing
+                // const currentTime = audioContext.currentTime; // This line was in your example but not used for progress calculation. Keeping it commented for now.
+                const safeDuration = currentAudio.duration || 0.1; // Prevent division by zero
+                const progress = (currentAudio.currentTime / safeDuration) * 100;
+                const indicator = currentParagraph.querySelector(".progress-indicator");
+                
+                // Disable CSS transitions for precise updates
+                if (indicator) { // Ensure indicator exists
+                    indicator.style.transition = 'none';
+                    indicator.style.width = `${progress}%`;
+                }
+                
+                if (isPlaying) { // Check isPlaying before requesting next frame
+                    requestAnimationFrame(updateProgress);
+                }
             }
 
         </script>

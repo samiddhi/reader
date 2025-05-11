@@ -2,192 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <style>
-            /* Base Styles */
-            body {
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 2rem;
-                font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-                line-height: 1.6;
-                color: #333;
-            }
-
-            p {
-                margin-block-start: 5px;
-                margin-block-end: 5px;
-            }
-
-            /* Paragraph Container */
-            .paragraph-group {
-                padding-top: 5px;
-                padding-bottom: 5px; /* Default padding, will expand on hover */
-                padding-left: 16px;
-                padding-right: 50px;
-                position: relative;
-                transition: all 0.3s ease;
-                border-radius: 10px;
-                overflow: hidden; /* Ensure progress bar stays within bounds */
-            }
-
-            .paragraph-group:hover {
-                background: rgba(0, 0, 0, 0.02);
-                padding-bottom: 20px; /* Expand padding to reveal progress bar */
-            }
-
-            /* Audio Controls */
-            .audio-controls {
-                position: absolute;
-                right: 10px;
-                top: 50%;
-                transform: translateY(-50%);
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-
-            .paragraph-group:hover .audio-controls,
-            .paragraph-group.active .audio-controls {
-                opacity: 1;
-            }
-
-            /* Play Button */
-            .play-btn {
-                width: 32px;
-                height: 32px;
-                border: none;
-                border-radius: 50%;
-                background: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #0071e3;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            }
-
-            .play-btn:hover {
-                background: #f5f5f5;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
-            }
-
-            .play-btn.playing {
-                background: #0071e3;
-                color: white;
-            }
-
-            /* Mode Selector */
-            .mode-selector {
-                position: fixed;
-                bottom: 24px;
-                right: 24px;
-                background: rgba(255, 255, 255, 0.9);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                border-radius: 24px;
-                padding: 8px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-                display: flex;
-                align-items: center; /* Ensure vertical alignment for separator */
-                gap: 4px;
-                z-index: 100;
-            }
-
-            .mode-btn {
-                border: none;
-                background: none;
-                padding: 8px 16px;
-                border-radius: 16px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                font-size: 13px;
-                color: #666;
-                transition: all 0.3s ease;
-            }
-
-            .mode-btn svg {
-                width: 14px;
-                height: 14px;
-                fill: currentColor;
-            }
-
-            .mode-btn.active {
-                background: rgba(0, 113, 227, 0.1);
-                color: #0071e3;
-            }
-
-            .mode-btn[data-mode="repeat"] {
-                padding: 8px; /* Icon is 24x24, 2*8px padding = 40px width/height */
-            }
-
-            .mode-separator {
-                width: 1px;
-                height: 24px;
-                background-color: #dadce0; /* Light gray separator */
-            }
-
-            /* Active Paragraph Styling */
-            .paragraph-group.active {
-                background: rgba(0, 113, 227, 0.05);
-                box-shadow: inset 3px 0 0 #0071e3;
-            }
-
-            /* Progress Bar */
-            .progress-container {
-                position: absolute;
-                bottom: 5px; /* Align to default padding, revealed by expansion */
-                left: 16px; /* Match paragraph padding */
-                right: 50px; /* Match audio controls space */
-                height: 12px; /* Fixed height for progress bar */
-                opacity: 0; /* Hidden by default */
-                transition: opacity 0.3s ease; /* Fade in/out */
-                cursor: pointer;
-            }
-
-            .paragraph-group:hover .progress-container {
-                opacity: 1; /* Reveal only on hover */
-            }
-
-            .progress-bar {
-                height: 4px; /* Thicker but still minimal */
-                background: rgba(0, 113, 227, 0.2);
-                width: 100%;
-                border-radius: 2px;
-                position: relative;
-                margin-top: 4px; /* Centered vertically in the revealed space */
-            }
-
-            .progress-indicator {
-                position: absolute;
-                height: 100%;
-                background: #0071e3;
-                width: 0;
-                border-radius: 2px;
-                will-change: width;
-            }
-
-            /* Add small circle handle on hover */
-            .progress-container:hover .progress-indicator {
-                height: 6px;
-                margin-top: -1px;
-            }
-
-            .progress-container:hover .progress-indicator::after {
-                content: "";
-                position: absolute;
-                right: -4px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 8px;
-                height: 8px;
-                background: #0071e3;
-                border-radius: 50%;
-            }
-        </style>
+        <title>Audio Player with Theme</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <div class="links-area">
+            <div id="theme-button" class="icon-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="2 2 20 20">
+                    <path fill="currentColor" d="M17 3.34A10 10 0 1 1 2 12l.005-.324A10 10 0 0 1 17 3.34M8 5.072A8 8 0 0 0 12.001 20L12 4a8 8 0 0 0-4 1.072"></path>
+                </svg>
+                <div class="icon-title">Theme</div>
+            </div>
+        </div>
         <div class="paragraph-group" data-audio="1. Prvo poglavje....mp3">
             <div class="audio-controls">
                 <button class="play-btn">▶</button>
@@ -259,6 +85,42 @@
         </div>
 
         <script>
+            // Theme switcher logic
+            const themeButton = document.getElementById('theme-button');
+            const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const currentTheme = localStorage.getItem('theme');
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                } else {
+                    document.documentElement.classList.add('light');
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+
+            if (currentTheme) {
+                applyTheme(currentTheme);
+            } else if (userPrefersDark) {
+                applyTheme('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                applyTheme('light'); // Default to light if no preference and no system preference
+                localStorage.setItem('theme', 'light');
+            }
+
+            themeButton.addEventListener('click', () => {
+                let theme = localStorage.getItem('theme');
+                if (theme === 'dark') {
+                    theme = 'light';
+                } else {
+                    theme = 'dark';
+                }
+                localStorage.setItem('theme', theme);
+                applyTheme(theme);
+            });
+
             // Audio system
             let currentAudio = null;
             let currentParagraph = null;

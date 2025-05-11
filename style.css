@@ -1,0 +1,374 @@
+/* ===== Theme Variables and Base Theme Styles ===== */
+:root {
+    --off-white: rgb(221, 221, 221);
+    --light-off-white: rgb(241, 241, 241);
+    --white: #fff;
+    --black: rgb(0, 0, 0);
+    --dark-gray: #5a5a5a;
+    --darker-gray: #181a1b; /* Used for text on light hover in dark mode */
+    --charcoal: #333;
+    --deep-anthracite: #131415; /* Dark mode background */
+    --dark-card-bg: #1c1e24; /* Dark mode card background */
+    --slate-gray: #444444; /* Dark mode borders / subtle backgrounds */
+    --card-bg: #fafbfc; /* Light mode card background */
+
+    --accent-color: #0071e3;
+    --accent-color-dark: #00a1ff; /* Brighter blue for dark mode */
+
+    --shadow-color-light: rgba(0, 0, 0, 0.1);
+    --shadow-color-dark: rgba(0, 0, 0, 0.3); /* Darker shadow for dark mode for visibility */
+    --subtle-bg-light: rgba(0, 0, 0, 0.02);
+    --subtle-bg-dark: rgba(255, 255, 255, 0.03);
+}
+
+html {
+    transition: background-color 250ms ease, color 250ms ease;
+}
+
+html.light,
+body.light {
+    background-color: var(--light-off-white);
+    color: var(--charcoal); /* Original #333 */
+}
+
+html.dark,
+body.dark {
+    background-color: var(--deep-anthracite);
+    color: var(--off-white);
+}
+
+/* ===== Original test.html Base Styles (Adapted for Theming) ===== */
+body {
+    /* margin: 0; from paliReader, keep if no conflict */
+    /* font-family: "RobotoSerif", serif; from paliReader, original uses -apple-system */
+    transition: background-color 250ms ease, color 250ms ease;
+
+    /* Original test.html body styles */
+    max-width: 800px;
+    margin: 0 auto; /* Keep this for centering content */
+    padding: 2rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* Original font stack */
+    line-height: 1.6;
+    /* color is handled by html/body.light/dark */
+}
+
+p {
+    margin-block-start: 5px;
+    margin-block-end: 5px;
+}
+
+/* Paragraph Container */
+.paragraph-group {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 16px;
+    padding-right: 50px;
+    position: relative;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.light .paragraph-group:hover {
+    background: var(--subtle-bg-light);
+    padding-bottom: 20px;
+}
+.dark .paragraph-group:hover {
+    background: var(--subtle-bg-dark);
+    padding-bottom: 20px;
+}
+
+/* Audio Controls */
+.audio-controls {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.paragraph-group:hover .audio-controls,
+.paragraph-group.active .audio-controls {
+    opacity: 1;
+}
+
+/* Play Button */
+.play-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.light .play-btn {
+    background: var(--white);
+    color: var(--accent-color);
+    box-shadow: 0 1px 3px var(--shadow-color-light);
+}
+.dark .play-btn {
+    background: var(--slate-gray); /* Darker button bg */
+    color: var(--accent-color-dark);
+    box-shadow: 0 1px 3px var(--shadow-color-dark);
+}
+
+.light .play-btn:hover {
+    background: #f5f5f5; /* Lighter than --light-off-white */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.16);
+}
+.dark .play-btn:hover {
+    background: var(--dark-gray); /* Lighter than slate-gray */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.light .play-btn.playing {
+    background: var(--accent-color);
+    color: var(--white);
+}
+.dark .play-btn.playing {
+    background: var(--accent-color-dark);
+    color: var(--darker-gray); /* Text on bright button */
+}
+
+/* Mode Selector */
+.mode-selector {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 100;
+}
+.light .mode-selector {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 20px var(--shadow-color-light);
+}
+.dark .mode-selector {
+    background: rgba(30, 30, 30, 0.85); /* Darker, slightly transparent */
+    box-shadow: 0 4px 20px var(--shadow-color-dark);
+    border: 1px solid var(--slate-gray); /* Subtle border for dark mode */
+}
+
+.mode-btn {
+    border: none;
+    background: none;
+    padding: 8px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+.light .mode-btn {
+    color: #666;
+}
+.dark .mode-btn {
+    color: var(--off-white);
+}
+
+.mode-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+.light .mode-btn.active {
+    background: rgba(0, 113, 227, 0.1); /* accent-color with alpha */
+    color: var(--accent-color);
+}
+.dark .mode-btn.active {
+    background: rgba(0, 161, 255, 0.15); /* accent-color-dark with alpha */
+    color: var(--accent-color-dark);
+}
+
+.mode-btn[data-mode="repeat"] {
+    padding: 8px;
+}
+
+.mode-separator {
+    width: 1px;
+    height: 24px;
+}
+.light .mode-separator {
+    background-color: #dadce0;
+}
+.dark .mode-separator {
+    background-color: var(--slate-gray);
+}
+
+/* Active Paragraph Styling */
+.light .paragraph-group.active {
+    background: rgba(0, 113, 227, 0.05); /* accent-color with alpha */
+    box-shadow: inset 3px 0 0 var(--accent-color);
+}
+.dark .paragraph-group.active {
+    background: rgba(0, 161, 255, 0.07); /* accent-color-dark with alpha */
+    box-shadow: inset 3px 0 0 var(--accent-color-dark);
+}
+
+/* Progress Bar */
+.progress-container {
+    position: absolute;
+    bottom: 5px;
+    left: 16px;
+    right: 50px;
+    height: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.paragraph-group:hover .progress-container {
+    opacity: 1;
+}
+
+.progress-bar {
+    height: 4px;
+    width: 100%;
+    border-radius: 2px;
+    position: relative;
+    margin-top: 4px;
+}
+.light .progress-bar {
+    background: rgba(0, 113, 227, 0.2); /* accent-color with alpha */
+}
+.dark .progress-bar {
+    background: rgba(0, 161, 255, 0.25); /* accent-color-dark with alpha */
+}
+
+.progress-indicator {
+    position: absolute;
+    height: 100%;
+    width: 0;
+    border-radius: 2px;
+    will-change: width;
+}
+.light .progress-indicator {
+    background: var(--accent-color);
+}
+.dark .progress-indicator {
+    background: var(--accent-color-dark);
+}
+
+.progress-container:hover .progress-indicator {
+    height: 6px;
+    margin-top: -1px;
+}
+
+.progress-container:hover .progress-indicator::after {
+    content: "";
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.light .progress-container:hover .progress-indicator::after {
+    background: var(--accent-color);
+}
+.dark .progress-container:hover .progress-indicator::after {
+    background: var(--accent-color-dark);
+}
+
+/* ===== paliReader Header Styles ===== */
+.links-area {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    gap: 1rem;
+    margin-bottom: 1rem; /* Add some space below header */
+}
+
+.icon-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 250ms ease;
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    font-family: "RobotoSerif Medium", serif; /* From paliReader */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.light .icon-button {
+    color: var(--black);
+}
+.dark .icon-button {
+    color: var(--off-white);
+}
+
+.light .icon-button:hover {
+    background-color: var(--off-white); /* Lighter than light-off-white */
+    color: var(--darker-gray);
+}
+.dark .icon-button:hover {
+    background-color: var(--slate-gray);
+    color: var(--light-off-white);
+}
+
+.icon-button svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: 0.25rem;
+    transition: fill 250ms ease;
+}
+.light .icon-button svg {
+    fill: var(--black);
+}
+.dark .icon-button svg {
+    fill: var(--off-white);
+}
+.light .icon-button:hover svg {
+    fill: var(--darker-gray);
+}
+.dark .icon-button:hover svg {
+    fill: var(--light-off-white);
+}
+
+
+.icon-title {
+    font-size: 1rem; /* Was 0.8rem in paliReader, original was 1rem */
+    margin-top: 4px;
+    line-height: 1.2;
+    white-space: nowrap;
+    font-family: "Roboto Medium", serif; /* From paliReader */
+}
+
+/* Font faces (optional) */
+/*
+@font-face {
+    font-family: "Roboto";
+    src: url("Roboto-Regular.ttf");
+}
+@font-face {
+    font-family: "RobotoSerif";
+    src: url("roboto-lightest.woff");
+}
+@font-face {
+    font-family: "RobotoSerif Medium";
+    src: url("RobotoSerif-Medium.ttf");
+}
+@font-face {
+    font-family: "Roboto Medium";
+    src: url("Roboto-Medium.ttf");
+}
+*/

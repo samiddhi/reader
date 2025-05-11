@@ -22,7 +22,7 @@
 }
 
 html {
-    transition: background-color 250ms ease, color 250ms ease;
+    transition: background-color 250ms ease; /* Text color will change immediately */
 }
 
 html.light,
@@ -41,7 +41,7 @@ body.dark {
 body {
     /* margin: 0; from paliReader, keep if no conflict */
     /* font-family: "RobotoSerif", serif; from paliReader, original uses -apple-system */
-    transition: background-color 250ms ease, color 250ms ease;
+    transition: background-color 250ms ease; /* Color transition handled by html element */
 
     /* Original test.html body styles */
     max-width: 800px;
@@ -55,6 +55,7 @@ body {
 p {
     margin-block-start: 5px;
     margin-block-end: 5px;
+    /* transition: color 250ms ease; */ /* Removed to prevent conflict with body transition */
 }
 
 /* Paragraph Container */
